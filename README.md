@@ -83,14 +83,20 @@ sudo apt install vlc ffmpeg -y
 ```
 
 ---
-
 ## 🚀 Running the System
 
 Use the provided scripts to launch the application:
 - **`.bat` files** are exclusively for **Windows**. 
 - **`.sh` files** are exclusively for **Linux (Ubuntu)**.
 
-**🐧 Linux (Ubuntu) Users Note:** Before running `.sh` scripts for the first time, you need to make them executable. Open a terminal in the folder and run `chmod +x *.sh`. Once executable, always run them by explicitly typing `./` before the filename (for example: `./start-server-debug.sh`).
+### ⚠️ Important Note for Windows Users
+
+> ❗ **Do NOT run the `.jar` file directly by double-clicking.**  
+> Always use the provided `.bat` script (`start-server-debug.bat` / `start-client-debug.bat`) to launch the application.
+
+#### 🔍 Reason:
+- Some Windows machines may encounter an **IPv6/IPv4 stack error** when running the `.jar` file directly.
+- The `.bat` script is pre-configured to fix this by forcing Java to use IPv4.
 
 ### Step 1: Launching the Server (Admin/Monitor PC)
 > 🚨 **CRITICAL NETWORK RULE:** Ensure there is **ONLY ONE** Server instance actively running on your local network at any given time. If multiple servers are active, clients might connect to the wrong server indiscriminately.
