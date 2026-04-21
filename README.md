@@ -1,81 +1,82 @@
-# Anti-Cheat System (ACS) - Demo Setup Guide
+# Anti-Cheat System (ACS) — Demo Setup Guide
 
 This guide provides quick and easy instructions to set up, deploy, and run the Anti-Cheat System for your demo. The system uses pre-compiled JAR files along with handy scripts to easily supervise and configure everything.
+
+---
 
 ## 🛡️ What Does This Application Do?
 
 The Anti-Cheat System (ACS) is designed to maintain testing integrity by monitoring a student's machine for suspicious behavior. When the client runs on a student's PC, it tracks and reports the following activities to the Server:
 
-*   **Targeted Monitoring Control:** When you click **"Start Monitoring"** on the server, the system immediately begins tracking and actively recording all activities. When you click **"Stop Monitoring"**, the recorded session is safely finalized and automatically saved as a session log.
-*   **On-Demand Live Screen Feed:** Allows proctors to simply click and start a live video stream of any connected student's screen locally over the network using FFmpeg.
-*   **Active Window Tracking:** Detects if a student tabs out of the testing environment to search the web or open an unauthorized application.
-*   **USB & Phone Detection:** Detects and alerts the server if new USB devices, flash drives, or mobile phones are plugged into the PC during the session.
-*   **Keylogging & Keyword Flagging:** Logs keyboard input and automatically flags suspicious behavior if certain predefined "banned" keywords are typed.
-*   **Fault Tolerance & Auto-Recovery:** The system features robust auto-discovery and auto-recovery methods. If a session is interrupted or network connection drops unexpectedly, the clients and server will automatically attempt to reconnect without breaking.
+| Feature | Description |
+|---|---|
+| **Targeted Monitoring Control** | Click **Start Monitoring** to begin tracking all activities. Click **Stop Monitoring** to finalize and save the session log. |
+| **On-Demand Live Screen Feed** | Start a live video stream of any connected student's screen over the local network using FFmpeg + VLC. |
+| **Active Window Tracking** | Detects if a student tabs out of the testing environment to browse the web or open unauthorized applications. |
+| **USB & Phone Detection** | Detects and alerts the server when new USB devices, flash drives, or mobile phones are plugged in during the session. |
+| **Keylogging & Keyword Flagging** | Logs keyboard input and automatically flags suspicious behavior when predefined "banned" keywords are typed. |
+| **Remote Input Locking** | Remotely lock/unlock a student's keyboard and mouse from the server dashboard during an exam. |
+| **Fault Tolerance & Auto-Recovery** | Robust auto-discovery and auto-recovery — if a session is interrupted or the connection drops, the system automatically reconnects. |
 
-> 🛠️ **Status (In Development):** Because this software is currently in active development, we are exclusively releasing and referring to the **Debug Mode** scripts for this demo. Running in debug mode leaves a console terminal open on the machines, allowing developers and proctors to see live internal application logs and quickly catch any errors.
+> 🛠️ **Status (In Development):** We are exclusively releasing **Debug Mode** scripts for this demo. Debug mode leaves a console terminal open so developers and proctors can see live application logs and catch errors.
 
 ---
 
 ## ⚙️ Prerequisites
-To run the server and client, you must have the **Java Runtime Environment (JRE) or JDK 25** installed on your system. 
-- Please install Java 25 before proceeding.
+
+| Requirement | Details |
+|---|---|
+| **Java** | JRE or JDK **25** must be installed on both server and client machines. |
+| **FFmpeg** | Required on the **Client** side for screen capture streaming. |
+| **VLC** | Required on the **Server** side for rendering live video streams. |
 
 ---
 
 ## 📂 Expected Directory Structure
 
-For everything to work smoothly, your server and client folders should look like the layout below. 
+> 💡 The **Server** and **Client** folders are completely independent of each other. You can set them up together on one machine for testing, or distribute the Client folder on its own to other machines.
 
-💡 **Note:** The **Server** and **Client** folders are completely independent of each other. You can set them up together on one machine for testing, or distribute the Client folder entirely on its own to other machines without issue.
-
-### Server Folder Structure
+### Server Folder
 ```text
 server/
-├── vlc/                   # Extracted VLC media player folder (Windows only)
-│   ├── libvlc.dll         # Ensure these core DLLs are visible here so the system finds VLC!
-│   ├── libvlccore.dll     
-│   └── ...                # Other VLC files and folders
-├── server-app.jar         # The main Server JAR file
-├── start-server-debug.bat # Run script for Windows
-└── start-server-debug.sh  # Run script for Linux (Ubuntu)
+├── vlc/                       # VLC media player folder (Windows only)
+│   ├── libvlc.dll
+│   ├── libvlccore.dll
+│   └── ...
+├── server-app.jar             # Main Server JAR
+├── start-server-debug.bat     # Windows launch script
+└── start-server-debug.sh      # Linux launch script
 ```
 
-### Client Folder Structure
+### Client Folder
 ```text
 client/
-├── ffmpeg/                
-│   └── ffmpeg.exe         # FFmpeg executable placed inside an 'ffmpeg' folder (Windows only)
-├── client-app.jar         # The main Client JAR file
-├── start-client-debug.bat # Run script for Windows
-└── start-client-debug.sh  # Run script for Linux (Ubuntu)
+├── ffmpeg/
+│   └── ffmpeg.exe             # FFmpeg executable (Windows only)
+├── client-app.jar             # Main Client JAR
+├── start-client-debug.bat     # Windows launch script
+└── start-client-debug.sh      # Linux launch script
 ```
 
 ---
 
-## 📦 Media Dependencies Setup (Crucial for Video Streaming)
+## 📦 Media Dependencies Setup
 
-The system heavily relies on **FFmpeg** (Client side) for capturing student screens and **VLC** (Server side) for rendering the video streams over the network. 
+The system relies on **FFmpeg** (Client) for screen capture and **VLC** (Server) for stream playback.
 
-### Option A: Windows
+### Windows
 
-**1. FFmpeg Setup (For the Client folder):**
-* Go to [https://www.gyan.dev/ffmpeg/builds/](https://www.gyan.dev/ffmpeg/builds/) and download the **ffmpeg-git-full.7z** or **.zip** build.
-* Extract the archive.
-* Open the extracted folder and navigate into the `bin` directory.
-* **Copy ONLY `ffmpeg.exe`** (you can strictly ignore `ffplay` and `ffprobe`).
-* Inside your **Client folder**, create a new folder named `ffmpeg`.
-* Paste `ffmpeg.exe` inside the newly created `ffmpeg` folder.
+**1. FFmpeg (Client folder):**
+1. Download from [gyan.dev/ffmpeg/builds](https://www.gyan.dev/ffmpeg/builds/) — get the **ffmpeg-git-full.7z** or **.zip** build.
+2. Extract → navigate into the `bin` directory → copy **only `ffmpeg.exe`**.
+3. In your Client folder, create a folder named `ffmpeg` and paste `ffmpeg.exe` inside it.
 
-**2. VLC Setup (For the Server folder):**
-* Download the VLC zip/portable version for Windows from here: [VLC Windows Download](https://images.videolan.org/vlc/download-windows.html)
-* Extract the downloaded VLC folder.
-* Rename the extracted folder to `vlc` and place it directly into your **Server folder**.
-* **Check your work:** Open the `vlc` folder you just placed. Make sure you immediately see files like `libvlc.dll` and `libvlccore.dll` inside it. This confirms you have placed the structural root of VLC in the correct spot.
+**2. VLC (Server folder):**
+1. Download the VLC zip/portable version from [videolan.org](https://images.videolan.org/vlc/download-windows.html).
+2. Extract and rename the folder to `vlc` → place it directly in the Server folder.
+3. **Verify:** Open the `vlc` folder — you should see `libvlc.dll` and `libvlccore.dll` at the top level.
 
-### Option B: Linux (Ubuntu)
-
-Setting up dependencies on Ubuntu is much faster since you do not need to deal with files manually. Open your terminal and run:
+### Linux (Ubuntu)
 
 ```bash
 sudo apt update
@@ -83,53 +84,122 @@ sudo apt install vlc ffmpeg -y
 ```
 
 ---
+
 ## 🚀 Running the System
 
 Use the provided scripts to launch the application:
-- **`.bat` files** are exclusively for **Windows**. 
-- **`.sh` files** are exclusively for **Linux (Ubuntu)**.
+- **`.bat`** → Windows
+- **`.sh`** → Linux (Ubuntu)
 
-### ⚠️ Important Note for Windows Users
+> ❗ **Windows Users — Do NOT double-click the `.jar` file directly.**
+> Always use the `.bat` script. Some machines encounter an IPv6/IPv4 stack error when running the JAR directly. The `.bat` script is pre-configured to force Java to use IPv4.
 
-> ❗ **Do NOT run the `.jar` file directly by double-clicking.**  
-> Always use the provided `.bat` script (`start-server-debug.bat` / `start-client-debug.bat`) to launch the application.
+> 🐧 **Linux Users:** Before running `.sh` scripts for the first time, make them executable:
+> ```bash
+> chmod +x *.sh
+> ```
 
-#### 🔍 Reason:
-- Some Windows machines may encounter an **IPv6/IPv4 stack error** when running the `.jar` file directly.
-- The `.bat` script is pre-configured to fix this by forcing Java to use IPv4.
+### Step 1 — Launch the Server (Admin / Proctor PC)
 
-### Step 1: Launching the Server (Admin/Monitor PC)
-> 🚨 **CRITICAL NETWORK RULE:** Ensure there is **ONLY ONE** Server instance actively running on your local network at any given time. If multiple servers are active, clients might connect to the wrong server indiscriminately.
+> 🚨 **CRITICAL:** Only **ONE** server should be running on your local network at a time. Multiple servers will cause clients to connect to the wrong one.
 
 1. Navigate to your Server directory.
 2. Run the server script:
    - **Windows:** Double-click `start-server-debug.bat`
-   - **Linux:** Run `./start-server-debug.sh`
-3. ⚠️ **IMPORTANT (Windows Users):** When the application starts, you will likely see a **Windows Defender Firewall** pop-up. You **MUST click "Allow access"** (and please ensure both private and public networks are checked). If you do not allow this, the firewall will block all incoming video streams.
+   - **Linux:** `./start-server-debug.sh`
+3. ⚠️ **Windows:** When the firewall pop-up appears, click **Allow access** (check both private and public networks). Without this, incoming video streams will be blocked.
 
-### Step 2: Setting up the Client (Student PCs)
-1. As mentioned, the **Client** folder is entirely independent. You can simply copy the fully structured Client folder (including the `ffmpeg/ffmpeg.exe` folder structure for Windows) and move it to any target student PC.
-2. Navigate into the Client directory on the student machine.
-3. Run the client script:
+### Step 2 — Set Up the Client (Student PCs)
+
+1. Copy the entire Client folder to each student machine.
+2. Run the client script:
    - **Windows:** Double-click `start-client-debug.bat`
-   - **Linux:** Run `./start-client-debug.sh`
-4. ⚠️ **IMPORTANT (Windows Users):** Just like the server, if a **Windows Defender Firewall** pop-up appears, you **MUST click "Allow access"** to permit network communication.
-5. *(Repeat this process for every student PC you want to monitor).*
+   - **Linux:** `./start-client-debug.sh`
+3. ⚠️ **Windows:** Allow firewall access if prompted.
+4. Repeat for every student PC.
 
-### Step 3: Operating the Session
-Once both the Server and Client(s) are running and communicating:
-1. **To Begin Recording:** On the Server application UI, click the **"Start Monitoring"** button. This will start the active tracking and recording of all connected client activities.
-2. **To Finish & Save:** When the demo/test is finished, click the **"Stop Monitoring"** button on the Server. This explicitly halts the tracking phase and generates the session's log file for review.
+### Step 3 — Operating the Session
+
+Once the server and clients are connected:
+
+| Action | How |
+|---|---|
+| **Start tracking** | Click **▶ Start Monitoring** on the server toolbar. |
+| **Lock all inputs** | Click **🔒 Lock All** on the toolbar (only available while monitoring). |
+| **Unlock all inputs** | Click **🔓 Unlock All** on the toolbar. |
+| **Per-client control** | Click a client card → use Lock/Unlock and Stream buttons in the detail dialog. |
+| **Stop & save** | Click **⏹ Stop Monitoring** — all tracking stops, locks are released, logs are saved. |
+
+---
+
+## 🔒 Input Locking (Remote Keyboard & Mouse Lock)
+
+The server operator can remotely lock a student's keyboard, mouse, and touchpad during an exam. This feature is **only available while monitoring is active**.
+
+### How It Works
+- **Lock All / Unlock All** buttons on the toolbar control all connected clients at once.
+- **Per-client Lock / Unlock** buttons are in each client's detail dialog (click the card).
+- Lock state is **persistent** — survives client restarts and server crashes within a session.
+- **Stop Monitoring** automatically unlocks all clients.
+
+### 🔑 Emergency Unlock (Backdoor Key)
+
+If a student is locked and the server is unreachable, pressing **`Ctrl + Alt + Shift + U`** on the student's machine will immediately unlock all input. The server is notified when this is used.
+
+### 🐧 Linux — Required Permission Setup
+
+For the emergency unlock key to work on Linux, the client user must be in the **`input`** group:
+
+```bash
+# Add user to the input group (run once, requires sudo)
+sudo usermod -aG input $(whoami)
+
+# ⚠️ Log out and log back in for the change to take effect!
+
+# Verify after re-login:
+groups    # should include 'input'
+```
+
+> ⚠️ **If this is not done**, the emergency unlock key will be **disabled** on Linux. The console will print a warning. Students can still be unlocked from the server, or by switching to a TTY (`Ctrl+Alt+F2`) and killing the Java process.
+
+### 🪟 Windows — Run as Administrator (Recommended)
+
+Keyboard and mouse locking works without admin. However, to also **block touchpad gestures** (3/4-finger swipe for app-switching), the client must be **run as Administrator**.
+
+### Safety Mechanisms
+
+| Scenario | What Happens |
+|---|---|
+| **Server crashes / disconnects** | Client automatically releases the lock. Student is never permanently locked. |
+| **Client process killed** (Task Manager / `kill`) | JVM shutdown hook re-enables all input devices. |
+| **Student kicked** | Server unlocks the client before kicking. |
+| **Stop Monitoring** | All clients automatically unlocked. |
 
 ---
 
 ## 📁 Logs & Session Management
 
-All recorded activities, system messages, and client session records are strictly logged and saved inside a root **`logs`** folder. 
+All recorded activities are logged and saved inside a root **`logs/`** folder in the server directory.
 
-**Log Structure & Flow:**
-1. When you click **"Stop Monitoring"**, the session officially concludes and saves everything.
-2. Inside the `logs` folder, the system will automatically create a sub-folder explicitly named after the monitored **Client's IP Address**.
-3. Inside that IP folder, a `.txt` file is generated containing a compiled, time-stamped timeline of the entire session.
+### Log Structure
+```text
+logs/
+└── session_21-04-2026_10-30-00/        # Timestamped session folder
+    ├── hostname1_192.168.1.10/         # Per-client folder (hostname_IP)
+    │   ├── activity.txt                # Active window tracking log
+    │   ├── keylog.txt                  # Keystroke log
+    │   ├── usb.txt                     # USB device events
+    │   ├── lock_state.properties       # Last known lock state
+    │   └── session.txt                 # Merged session timeline
+    ├── hostname2_192.168.1.11/
+    │   └── ...
+    └── session.txt                     # Server-level session log
+```
 
-If there is any strange behavior with a client, navigate into their matched IP folder to check these `.txt` files for complete insights.
+### How It Works
+1. **Start Monitoring** creates a new timestamped session folder.
+2. During the session, all client activity is written to per-client subfolders.
+3. **Stop Monitoring** finalizes the session — merges all logs into `session.txt` files.
+4. If a client disconnects and reconnects, logs continue appending to the same session folder.
+
+> 💡 Navigate into a client's IP folder and check the `.txt` files for a complete, timestamped timeline of their activity.
