@@ -26,7 +26,7 @@ The Anti-Cheat System (ACS) is designed to maintain testing integrity by monitor
 
 | Requirement | Details |
 |---|---|
-| **Java** | JRE or JDK **25** must be installed on both server and client machines. |
+| **Java** | JRE or JDK **26** must be installed on both server and client machines. |
 | **FFmpeg** | Required on the **Client** side for screen capture streaming. |
 | **VLC** | Required on the **Server** side for rendering live video streams. |
 
